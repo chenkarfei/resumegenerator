@@ -1,0 +1,50 @@
+{
+  "entities": {
+    "Resume": {
+      "title": "Resume Data",
+      "description": "User's saved resume and preference data",
+      "type": "object",
+      "properties": {
+        "resumeData": {
+          "type": "object",
+          "properties": {
+            "personal": {
+              "type": "object",
+              "properties": {
+                "fullName": { "type": "string" },
+                "jobTitle": { "type": "string" },
+                "email": { "type": "string" },
+                "phone": { "type": "string" },
+                "location": { "type": "string" },
+                "linkedin": { "type": "string" },
+                "website": { "type": "string" },
+                "summary": { "type": "string" }
+              }
+            },
+            "experience": {
+              "type": "array",
+              "items": { "type": "object" }
+            },
+            "education": {
+              "type": "array",
+              "items": { "type": "object" }
+            },
+            "skills": { "type": "string" }
+          }
+        },
+        "theme": { "type": "string" },
+        "color": { "type": "string" },
+        "coverLetter": { "type": "string" },
+        "jobMatches": { "type": "array", "items": { "type": "string" } },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["resumeData", "theme", "color", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/resumes/{userId}": {
+      "schema": "Resume",
+      "description": "Individual user resumes keyed by authentication UID"
+    }
+  }
+}

@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@media print {
+  @page {
+    margin: 10mm;
+    size: A4;
+  }
+  
+  /* Suppress default headers/footers */
+  @page :left { margin: 10mm; }
+  @page :right { margin: 10mm; }
+  @page :first { margin-top: 10mm; }
+  
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    background: white !important;
+  }
+
+  .no-print, nav, aside, button {
+    display: none !important;
+  }
+
+  main, .flex, .flex-col, .h-screen {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #resume-preview-document {
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    border: none !important;
+  }
+
+  /* Utility to prevent breaking sections in half across pages */
+  .break-inside-avoid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  @keyframes pulseSubtle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.95; transform: scale(1.02); }
+  }
+  .animate-pulse-subtle {
+    animation: pulseSubtle 2s infinite ease-in-out;
+  }
+}
+
+/* Base custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}

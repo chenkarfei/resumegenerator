@@ -1,0 +1,6 @@
+{
+  "name": "ResumeGenerator",
+  "description": "An AI-powered resume and cover letter builder featuring multi-theme support, PDF export, Gemini AI content suggestions, resume parsing, and Firebase integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
