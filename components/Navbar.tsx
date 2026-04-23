@@ -9,7 +9,7 @@ export function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
-  const { data, setFullData, theme, color, coverLetter, jobMatches } = useResumeStore();
+  const { data, setFullData, theme, color, coverLetter, jobMatches, setCoverLetter, setTheme, setColor, setJobMatches } = useResumeStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -24,6 +24,18 @@ export function Navbar() {
             if (savedData.resumeData) {
               setFullData(savedData.resumeData);
             }
+            if (savedData.coverLetter) {
+              setCoverLetter(savedData.coverLetter);
+            }
+            if (savedData.theme) {
+              setTheme(savedData.theme);
+            }
+            if (savedData.color) {
+              setColor(savedData.color);
+            }
+            if (savedData.jobMatches) {
+              setJobMatches(savedData.jobMatches);
+            }
           }
         } catch (e) {
           console.error("Error loading resume:", e);
@@ -31,7 +43,7 @@ export function Navbar() {
       }
     });
     return () => unsubscribe();
-  }, [setFullData]);
+  }, [setFullData, setCoverLetter, setTheme, setColor, setJobMatches]);
 
   const handleSignIn = async () => {
     const provider = new GoogleAuthProvider();
