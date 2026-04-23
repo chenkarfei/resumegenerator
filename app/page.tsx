@@ -1,13 +1,29 @@
 'use client';
 
+import { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { ResumeEditor } from '@/components/ResumeEditor';
 import { ResumePreview } from '@/components/ResumePreview';
 import { ThemeSelector } from '@/components/ThemeSelector';
+import { ExternalLink } from 'lucide-react';
 
 export default function Home() {
+  const [showPrintModal, setShowPrintModal] = useState(false);
+
   const handlePrint = () => {
-    // Legacy fallback, logic heavily moved to client-side pdf generator
+    try {
+      if (window.self !== window.top) {
+        setShowPrintModal(true);
+        return;
+      }
+    } catch (e) {
+      // Catch DOMException if cross-origin access blocks window.top check
+      setShowPrintModal(true);
+      return;
+    }
+    
+    // Natively trigger print to generate perfectly paginated PDF
+    window.print();
   };
 
   return (
@@ -36,6 +52,31 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      {/* Iframe Print Warning Modal */}
+      {showPrintModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/20 backdrop-blur-sm p-4 no-print transition-all">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-100">
+            <div className="flex items-center justify-center w-12 h-12 bg-amber-100 text-amber-600 rounded-full mb-4">
+              <ExternalLink className="w-6 h-6" />
+            </div>
+            <h3 className="text-xl font-bold text-slate-900 mb-2">Notice: Preview Environment</h3>
+            <p className="text-sm text-slate-600 mb-6 leading-relaxed">
+              The browser&apos;s native paginated PDF generator is blocked within this embedded designer. 
+              <br /><br />
+              Please open the app natively by clicking the <strong>Open App in New Tab (↗)</strong> button at the top right of your workspace to download your PDF!
+            </p>
+            <div className="flex flex-col sm:flex-row justify-end gap-3">
+              <button 
+                onClick={() => setShowPrintModal(false)}
+                className="px-5 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-colors"
+              >
+                Okay, I'll open a new tab!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

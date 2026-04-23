@@ -17,41 +17,6 @@ export function ResumeEditor({ onPrint }: { onPrint: () => void }) {
     setActiveSection(activeSection === section ? null : section);
   };
 
-  const handleDownloadPDF = async () => {
-    const element = document.getElementById('resume-preview-document');
-    if (!element) return;
-    
-    setIsDownloading(true);
-    try {
-      // Dynamically import html2pdf to prevent Next.js SSR crashes
-      // @ts-ignore - html2pdf doesn't always have perfect types but it works safely
-      const html2pdf = (await import('html2pdf.js')).default;
-      
-      const opt: any = {
-        margin:       [10, 0, 10, 0], // Top, Right, Bottom, Left margins in mm
-        filename:     `${data.personal.fullName ? data.personal.fullName.replace(/\s+/g, '_') : 'Resume'}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { 
-          scale: 2, 
-          useCORS: true,
-          backgroundColor: '#ffffff'
-        },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        // The magic bullet: instructs html2pdf to naturally split pages around our protected elements!
-        pagebreak:    { mode: ['css', 'legacy'], avoid: ['.break-inside-avoid', 'h1', 'h2', 'h3'] }
-      };
-
-      await html2pdf().set(opt).from(element).save();
-      
-    } catch (error) {
-      console.error('Download failed:', error);
-      // Fallback
-      onPrint();
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
   const handleAddExperience = () => {
     addExperience({
       id: Date.now().toString(),
@@ -109,13 +74,12 @@ export function ResumeEditor({ onPrint }: { onPrint: () => void }) {
           </button>
           
           <button 
-            onClick={handleDownloadPDF}
-            disabled={isDownloading}
-            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-full text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed"
-            title="Download multi-page PDF (Smart Pagination)"
+            onClick={onPrint}
+            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-full text-sm font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200 active:scale-95"
+            title="Download beautifully paginated PDF"
           >
-            {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-            <span className="hidden sm:inline">{isDownloading ? 'Generating...' : 'Download PDF'}</span>
+            <Download className="w-4 h-4" />
+            <span className="hidden sm:inline">Download PDF</span>
           </button>
         </div>
       </div>
