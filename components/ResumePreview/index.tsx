@@ -1432,7 +1432,7 @@ export const ResumePreview = React.forwardRef<HTMLDivElement>((props, ref) => {
     <div
       ref={ref}
       id="resume-preview-document"
-      className={`w-full max-w-[800px] bg-white shadow-2xl shadow-slate-400/50 rounded-sm min-h-[1056px] mx-auto ${themeFont} print:shadow-none print:m-0 overflow-hidden text-slate-800`}
+      className={`w-full max-w-[800px] bg-white shadow-2xl shadow-slate-400/50 rounded-sm min-h-[1056px] mx-auto ${themeFont} print:shadow-none print:m-0 print:max-w-none print:w-screen overflow-hidden text-slate-800`}
     >
       {renderTemplate()}
     </div>

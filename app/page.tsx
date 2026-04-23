@@ -41,12 +41,12 @@ export default function Home() {
         </section>
 
         {/* Right Column: Preview */}
-        <section className="flex flex-col w-full md:w-1/2 lg:w-[55%] h-full bg-slate-200/50 overflow-hidden relative print:bg-white print:w-full print:h-auto print:overflow-visible">
+        <section className="flex flex-col w-full md:w-1/2 lg:w-[55%] h-full bg-slate-200/50 overflow-hidden relative print:bg-white print:w-screen print:h-auto print:overflow-visible print:absolute print:inset-0 print:z-50 print:m-0 print:p-0">
           <div className="no-print">
             <ThemeSelector />
           </div>
-          <div className="flex-1 overflow-y-auto p-4 lg:p-8 flex items-start justify-center printable-area relative print:p-0 print:overflow-visible print:block">
-            <div className="scale-[0.85] xl:scale-100 origin-top print:scale-100 print:transform-none">
+          <div className="flex-1 overflow-y-auto p-4 lg:p-8 flex items-start justify-center printable-area relative print:p-0 print:m-0 print:block print:overflow-visible print:w-screen print:max-w-none">
+            <div className="scale-[0.85] xl:scale-100 origin-top print:scale-100 print:transform-none print:w-screen print:max-w-none print:p-0 print:m-0">
               <ResumePreview />
             </div>
           </div>
