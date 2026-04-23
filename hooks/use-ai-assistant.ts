@@ -2,7 +2,13 @@ import { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { ResumeData } from './use-resume-store';
 
-const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
+let aiClient: GoogleGenAI | null = null;
+const getAI = () => {
+  if (!aiClient) {
+    aiClient = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'dummy_key' });
+  }
+  return aiClient;
+};
 
 export function useAIAssistant() {
   const [isSummarizing, setIsSummarizing] = useState(false);
@@ -14,6 +20,7 @@ export function useAIAssistant() {
     if (!currentSummary.trim()) return currentSummary;
     setIsSummarizing(true);
     try {
+      const ai = getAI();
       const prompt = `Rewrite this professional summary to be more impactful, concise, and engaging. Keep it around 3-4 sentences. Do not use generic buzzwords if possible.
       CRITICAL: Return PLAIN TEXT ONLY. Do NOT use ANY Markdown formatting like asterisks (*), bolding (**), or hashes.
       Current summary:
@@ -37,6 +44,7 @@ export function useAIAssistant() {
     if (!currentBullets.trim()) return currentBullets;
     setIsEnhancingBullets(jobId);
     try {
+      const ai = getAI();
       const prompt = `Rewrite these resume experience bullet points to be highly professional. 
       Start each bullet with a strong action verb. Focus on impact and metrics where possible.
       
@@ -63,6 +71,7 @@ export function useAIAssistant() {
   const generateCoverLetter = async (resume: ResumeData): Promise<string> => {
     setIsGeneratingCoverLetter(true);
     try {
+      const ai = getAI();
       const context = JSON.stringify(resume);
       const prompt = `Write a highly professional and compelling cover letter based on this resume data.
       Make sure to utilize the exact name, contact info, and recent experiences.
@@ -87,6 +96,7 @@ export function useAIAssistant() {
   const generateCareerMatches = async (resume: ResumeData): Promise<string[]> => {
     setIsMatchingCareers(true);
     try {
+      const ai = getAI();
       const context = JSON.stringify(resume);
       const prompt = `Analyze the following resume and suggest 5 specific job titles or career paths that perfectly match the skills, experience, and education level of this candidate.
       Return the result strictly as a JSON array of 5 strings and NOTHING ELSE. No extra text or markdown wrappers like \`\`\`json.

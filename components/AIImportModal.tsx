@@ -3,7 +3,13 @@ import { GoogleGenAI } from '@google/genai';
 import { useResumeStore, ResumeData } from '@/hooks/use-resume-store';
 import { X, Loader2, Sparkles } from 'lucide-react';
 
-const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
+let aiClient: GoogleGenAI | null = null;
+const getAI = () => {
+  if (!aiClient) {
+    aiClient = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY || 'dummy_key' });
+  }
+  return aiClient;
+};
 
 export function AIImportModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [text, setText] = useState('');
@@ -72,6 +78,7 @@ export function AIImportModal({ isOpen, onClose }: { isOpen: boolean; onClose: (
         ${text}
       `;
 
+      const ai = getAI();
       const response = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
